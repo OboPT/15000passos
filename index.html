@@ -90,7 +90,7 @@
   .dayhead h3:focus { outline:0; }
   .icon { width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--glass2); color:var(--tx); font:700 1.2rem var(--font); cursor:pointer; flex:none; display:grid; place-items:center; transition:transform .12s; }
   .icon:active { transform:scale(.9); }
-  .chip { display:inline-block; font-size:.8rem; font-weight:700; padding:5px 11px; border-radius:99px; background:var(--glass2); color:var(--mut); margin-top:8px; }
+  .chip { white-space:nowrap; display:inline-block; font-size:.8rem; font-weight:700; padding:5px 11px; border-radius:99px; background:var(--glass2); color:var(--mut); margin-top:8px; }
   .chip.ok { background:#14532d66; color:#86efac; } .chip.near { background:#78350f66; color:#fcd34d; } .chip.low { background:#7f1d1d66; color:#fca5a5; }
   .big { display:flex; align-items:center; gap:8px; margin:18px 0 6px; }
   .big input { flex:1; min-width:0; text-align:center; background:transparent; border:0; outline:0; color:var(--tx); font:800 3rem/1 var(--font); letter-spacing:-.04em; }
@@ -433,7 +433,7 @@
     $('glab').textContent = fmt(G);
     $('ndays').textContent = logged.length + (logged.length === 1 ? ' dia' : ' dias');
     $('chart').setAttribute('aria-label', 'Gráfico de barras com os passos de ' + logged.length + ' dias registados. Meta diária ' + fmt(G) + '. Melhor dia ' + fmt(best) + '.');
-    $('chart').hidden = !logged.length; $('empty').hidden = !!logged.length;
+    $('chart').toggleAttribute('hidden', !logged.length); $('empty').toggleAttribute('hidden', !!logged.length);
     if (logged.length) {
       var W = 600, H = 200, bw = W / N, max = Math.max(G, best, 1) * 1.12;
       var bars = days.map(function (k, j) {
