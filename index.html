@@ -24,8 +24,16 @@
     --font:'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html { color-scheme:dark; }
-  body { margin:0; font:500 15px/1.45 var(--font); color:var(--tx); background:var(--bg); min-height:100vh; overflow-x:hidden; font-variant-numeric:tabular-nums; }
+  [hidden] { display:none !important; }
+  html { color-scheme:dark; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  .sr-only { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  .skip { position:absolute; left:12px; top:-80px; z-index:100; background:#fff; color:#000; padding:12px 16px; border-radius:12px; font-weight:800; text-decoration:none; }
+  .skip:focus { top:12px; }
+  :focus-visible { outline:3px solid #fff; outline-offset:3px; }
+  .cell:focus-visible, .icon:focus-visible, .btn:focus-visible, nav.tabs button:focus-visible { outline-offset:2px; }
+  .big:focus-within { outline:3px solid #fff; outline-offset:3px; border-radius:20px; }
+  .big input:focus-visible { outline:0; }
+  body { margin:0; font:500 15px/1.45 var(--font); color:var(--tx); background:var(--bg); min-height:100vh; overflow-x:hidden; overflow-x:clip; font-variant-numeric:tabular-nums; }
   .blobs { position:fixed; inset:0; z-index:-1; overflow:hidden; }
   .blobs i { position:absolute; width:70vmax; height:70vmax; border-radius:50%; filter:blur(70px); opacity:.5; animation:drift 22s ease-in-out infinite alternate; }
   .blobs i:nth-child(1) { background:radial-gradient(circle,#0f6b5f,transparent 65%); top:-30vmax; left:-20vmax; }
@@ -36,25 +44,26 @@
   header.top { position:sticky; top:0; z-index:5; display:flex; justify-content:space-between; align-items:center;
     padding:calc(14px + env(safe-area-inset-top)) 18px 12px; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
     background:linear-gradient(#0a1210cc,#0a121000); }
-  .brand { font-weight:800; font-size:1.15rem; letter-spacing:-.02em; }
+  .brand { margin:0; font-weight:800; font-size:1.15rem; letter-spacing:-.02em; }
   .brand span { color:var(--year); }
   .pill { font-size:.78rem; font-weight:700; padding:7px 12px; border-radius:99px; background:var(--glass2); border:1px solid var(--line); }
-  main { max-width:560px; margin:0 auto; padding:4px 14px calc(112px + env(safe-area-inset-bottom)); }
-  .view { display:none; gap:14px; }
+  main { max-width:560px; margin:0 auto; padding:4px max(14px, env(safe-area-inset-right)) calc(112px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+  .view { display:none; gap:14px; grid-template-columns:minmax(0,1fr); }
+  .view > * { min-width:0; }
   .view.active { display:grid; animation:in .38s cubic-bezier(.2,.8,.2,1); }
   @keyframes in { from { opacity:0; transform:translateY(10px); } }
 
-  .glass { background:var(--glass); border:1px solid var(--line); border-radius:28px; padding:20px;
+  .glass { min-width:0; overflow-wrap:break-word; background:var(--glass); border:1px solid var(--line); border-radius:28px; padding:20px;
     backdrop-filter:blur(22px) saturate(140%); -webkit-backdrop-filter:blur(22px) saturate(140%);
     box-shadow:0 1px 0 rgba(255,255,255,.06) inset, 0 20px 40px -24px rgba(0,0,0,.6); }
-  .eyebrow { font-size:.7rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); }
+  .eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); }
   h2 { margin:6px 0 0; font-size:1.5rem; font-weight:800; letter-spacing:-.03em; line-height:1.15; }
   h3 { margin:0; font-size:1.05rem; font-weight:800; letter-spacing:-.02em; }
   .mut { color:var(--mut); }
   .grad { background:linear-gradient(120deg,#5eead4,#bef264); -webkit-background-clip:text; background-clip:text; color:transparent; }
 
   /* anéis */
-  .rings { display:grid; grid-template-columns:minmax(150px,1fr) 1.1fr; gap:14px; align-items:center; }
+  .rings { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr)); gap:18px; align-items:center; }
   .ringbox { position:relative; width:100%; max-width:210px; aspect-ratio:1; margin:auto; }
   .ringbox svg { width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
   .ringbox circle { transition:stroke-dasharray 1s cubic-bezier(.2,.8,.2,1); }
@@ -63,54 +72,57 @@
   .ringbox .mid small { display:block; font-size:.58rem; font-weight:700; color:var(--mut); letter-spacing:.12em; text-transform:uppercase; text-align:center; }
   .legendr { display:grid; gap:12px; }
   .legendr div { display:grid; grid-template-columns:10px 1fr; gap:2px 10px; align-items:center; }
-  .legendr i { width:10px; height:10px; border-radius:50%; grid-row:span 2; align-self:start; margin-top:5px; box-shadow:0 0 10px currentColor; }
+  .legendr i { background:currentColor; width:10px; height:10px; border-radius:50%; grid-row:span 2; align-self:start; margin-top:5px; box-shadow:0 0 10px currentColor; }
   .legendr b { font-size:1.05rem; font-weight:800; letter-spacing:-.02em; }
-  .legendr span { font-size:.76rem; color:var(--mut); }
+  .legendr span { font-size:.82rem; color:var(--mut); }
 
   .stats { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; margin:0 -14px; padding:0 14px 4px; scrollbar-width:none; }
   .stats::-webkit-scrollbar { display:none; }
   .stat { flex:none; scroll-snap-align:start; min-width:132px; }
-  .stat small { display:block; font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mut); }
+  .stat small { display:block; font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mut); }
   .stat b { display:block; font-size:1.55rem; font-weight:800; letter-spacing:-.03em; margin-top:4px; }
   .stat.glass { padding:16px 16px; border-radius:22px; }
 
   /* registo */
   .dayhead { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-  .dayhead .t { text-align:center; flex:1; }
-  .dayhead h2 { font-size:1.35rem; }
+  .dayhead .t { text-align:center; flex:1; min-width:0; }
+  .dayhead h3 { font-size:1.35rem; margin:6px 0 0; font-weight:800; letter-spacing:-.03em; line-height:1.15; overflow-wrap:anywhere; }
+  .dayhead h3:focus { outline:0; }
   .icon { width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--glass2); color:var(--tx); font:700 1.2rem var(--font); cursor:pointer; flex:none; display:grid; place-items:center; transition:transform .12s; }
   .icon:active { transform:scale(.9); }
-  .chip { display:inline-block; font-size:.72rem; font-weight:700; padding:5px 11px; border-radius:99px; background:var(--glass2); color:var(--mut); margin-top:8px; }
+  .chip { display:inline-block; font-size:.8rem; font-weight:700; padding:5px 11px; border-radius:99px; background:var(--glass2); color:var(--mut); margin-top:8px; }
   .chip.ok { background:#14532d66; color:#86efac; } .chip.near { background:#78350f66; color:#fcd34d; } .chip.low { background:#7f1d1d66; color:#fca5a5; }
   .big { display:flex; align-items:center; gap:8px; margin:18px 0 6px; }
   .big input { flex:1; min-width:0; text-align:center; background:transparent; border:0; outline:0; color:var(--tx); font:800 3rem/1 var(--font); letter-spacing:-.04em; }
-  .big input::placeholder { color:#3d514a; }
+  .big input::placeholder { color:#6f857c; }
   .big .icon { width:52px; height:52px; font-size:.85rem; }
   .fb { text-align:center; color:var(--mut); font-size:.9rem; min-height:1.4em; margin-bottom:14px; }
   .btns { display:grid; grid-template-columns:1.6fr 1fr; gap:10px; }
   .btn { border:0; border-radius:18px; padding:16px; font:800 1rem var(--font); cursor:pointer; color:#04201b; background:linear-gradient(120deg,#5eead4,#bef264); transition:transform .12s, filter .2s; }
   .btn:active { transform:scale(.97); }
   .btn.ghost { background:var(--glass2); color:var(--tx); border:1px solid var(--line); }
-  .linkbtn { background:none; border:0; color:var(--year); font:700 .88rem var(--font); padding:12px 0 0; cursor:pointer; text-align:left; }
+  .linkbtn { background:none; border:0; color:var(--year); font:700 .95rem var(--font); padding:12px 0; min-height:44px; cursor:pointer; text-align:left; }
   .datein { margin-top:14px; }
-  label { display:block; font-size:.74rem; color:var(--mut); margin-bottom:5px; font-weight:600; }
+  label { display:block; font-size:.82rem; color:var(--mut); margin-bottom:5px; font-weight:600; }
   input[type=date], input.plain { width:100%; background:var(--glass); border:1px solid var(--line); border-radius:14px; padding:13px; color:var(--tx); font:600 1rem var(--font); color-scheme:dark; }
 
   /* heatmap */
-  .cal { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:16px; }
-  .cal .h { text-align:center; font-size:.66rem; font-weight:700; color:var(--mut); text-transform:uppercase; letter-spacing:.1em; padding-bottom:2px; }
+  .cal { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px; margin-top:16px; }
+  .cal .h { text-align:center; font-size:.74rem; font-weight:700; color:var(--mut); text-transform:uppercase; letter-spacing:.1em; padding-bottom:2px; }
   .cell { aspect-ratio:1/1.12; border-radius:15px; border:0; background:rgba(255,255,255,.06); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;
     line-height:1.15; padding:0; cursor:pointer; font-family:var(--font); position:relative; transition:transform .15s; }
   .cell:active { transform:scale(.92); }
-  .cell b { font-size:.95rem; font-weight:800; } .cell span { font-size:.62rem; font-weight:600; opacity:.9; }
+  .cell { min-width:0; overflow:hidden; padding-top:9px; }
+  .cell.hit::before { content:'✓'; position:absolute; top:2px; left:5px; font-size:.72rem; line-height:1; font-weight:800; }
+  .cell b { font-size:.95rem; font-weight:800; } .cell span { font-size:.72rem; font-weight:600; opacity:.9; }
   .cell.has { color:#06241d; text-shadow:none; }
   .cell.hit { box-shadow:0 0 18px -2px var(--c); }
-  .cell.future { opacity:.42; }
+  .cell.future { border:2px dashed rgba(255,255,255,.3); }
   .cell.today::after { content:''; position:absolute; top:5px; right:5px; width:6px; height:6px; border-radius:50%; background:var(--day); box-shadow:0 0 8px var(--day); }
   .cell.sel { outline:2px solid #fff; outline-offset:1px; }
   .blank { visibility:hidden; }
   .scale { height:10px; border-radius:99px; margin-top:16px; }
-  .scalel { display:flex; justify-content:space-between; font-size:.7rem; color:var(--mut); margin-top:6px; font-weight:600; }
+  .scalel { display:flex; justify-content:space-between; font-size:.78rem; color:var(--mut); margin-top:6px; font-weight:600; }
   #chart { width:100%; height:200px; display:block; margin-top:16px; }
   .empty { margin-top:16px; border:1.5px dashed var(--line); border-radius:20px; padding:30px 16px; text-align:center; color:var(--mut); }
   .empty b { display:block; color:var(--tx); font-size:1.05rem; margin:6px 0 2px; }
@@ -125,7 +137,7 @@
   .wk .big2 { font-size:1.9rem; font-weight:800; letter-spacing:-.04em; line-height:1; }
   .spark { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; align-items:end; height:64px; }
   .spark i { display:block; border-radius:6px; background:rgba(255,255,255,.07); min-height:5px; }
-  .spark.sm { grid-template-columns:repeat(var(--n),1fr); }
+  .spark.sm { grid-template-columns:repeat(var(--n),minmax(0,1fr)); max-width:calc(var(--n) * 56px); }
   .meter { height:8px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
   .meter i { display:block; height:100%; border-radius:99px; transition:width .7s cubic-bezier(.2,.8,.2,1); }
   .wk small { color:var(--mut); font-weight:600; }
@@ -138,7 +150,7 @@
     display:flex; gap:4px; padding:7px; width:min(420px,calc(100% - 28px)); border-radius:26px; background:rgba(18,30,27,.72);
     border:1px solid var(--line); backdrop-filter:blur(24px) saturate(160%); -webkit-backdrop-filter:blur(24px) saturate(160%);
     box-shadow:0 20px 40px -10px rgba(0,0,0,.7); }
-  nav.tabs button { flex:1; border:0; background:transparent; color:var(--mut); font:700 .66rem var(--font); display:grid; justify-items:center; gap:3px; padding:9px 0 8px; border-radius:19px; cursor:pointer; transition:background .25s,color .25s; }
+  nav.tabs button { flex:1; border:0; background:transparent; color:var(--mut); font:700 .75rem var(--font); display:grid; justify-items:center; gap:3px; padding:9px 0 8px; border-radius:19px; cursor:pointer; transition:background .25s,color .25s; }
   nav.tabs button svg { width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   nav.tabs button.on { background:rgba(94,234,212,.16); color:#5eead4; }
   .msg { font-size:.85rem; color:var(--mut); margin-top:10px; min-height:1.2em; }
@@ -158,31 +170,34 @@
   @media (max-height:520px) and (orientation:landscape) {
     header.top { position:static; padding-top:calc(8px + env(safe-area-inset-top)); padding-bottom:6px; }
     main { padding-bottom:calc(78px + env(safe-area-inset-bottom)); }
-    nav.tabs { width:min(360px,calc(100% - 28px)); padding:4px; bottom:calc(8px + env(safe-area-inset-bottom)); border-radius:20px; }
-    nav.tabs button { font-size:0; gap:0; padding:9px 0; border-radius:15px; }
-    nav.tabs button svg { width:22px; height:22px; }
+    nav.tabs { width:min(520px,calc(100% - 28px)); padding:4px; bottom:calc(8px + env(safe-area-inset-bottom)); border-radius:20px; }
+    nav.tabs button { display:flex; align-items:center; justify-content:center; gap:7px; padding:10px 4px; border-radius:15px; }
     .ringbox { max-width:150px; }
     .glass { padding:16px; border-radius:22px; }
   }
+  @media (max-width:360px) { .cal { gap:4px; } .glass { padding:16px 14px; } }
+  @media (max-width:340px) { nav.tabs button { font-size:.7rem; } .big input { font-size:2.3rem; } }
   @media (prefers-reduced-motion: reduce) { .cf{display:none} .blobs i{animation:none} .ringbox circle,.meter i{transition:none} .view.active{animation:none} }
 </style>
 </head>
 <body>
-<div class="blobs"><i></i><i></i><i></i></div>
+<a class="skip" href="#main">Saltar para o conteúdo</a>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
 
 <header class="top">
-  <div class="brand">Passos <span>2026</span></div>
+  <h1 class="brand">Passos <span>2026</span></h1>
   <div class="pill" id="pillnow">—</div>
 </header>
 
-<main>
+<main id="main">
 
   <!-- HOJE -->
-  <section class="view active" id="v-hoje">
-    <div class="glass">
+  <section class="view active" id="v-hoje" role="tabpanel" aria-labelledby="t-hoje">
+    <h2 class="sr-only">Progresso e registo de hoje</h2>
+    <div class="glass" role="group" aria-label="Progresso do objetivo">
       <div class="rings">
         <div class="ringbox">
-          <svg viewBox="0 0 120 120">
+          <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
             <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="9"/>
             <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="9"/>
             <circle cx="60" cy="60" r="28" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="9"/>
@@ -201,20 +216,21 @@
       <p class="mut" id="msg1" style="margin-top:16px;font-weight:600"></p>
     </div>
 
-    <div class="stats" id="stats"></div>
+    <div class="stats" id="stats" tabindex="0" role="group" aria-label="Estatísticas"></div>
 
     <div class="glass" id="registo">
       <div class="dayhead">
-        <button class="icon" id="prev" aria-label="dia anterior">‹</button>
-        <div class="t"><div class="eyebrow" id="deyebrow">Registo do dia</div><h2 id="dtitle">—</h2><span class="chip" id="dchip">Por registar</span></div>
-        <button class="icon" id="next" aria-label="dia seguinte">›</button>
+        <button class="icon" id="prev" aria-label="Dia anterior">‹</button>
+        <div class="t"><div class="eyebrow" id="deyebrow">Registo do dia</div><h3 id="dtitle" tabindex="-1">—</h3><span class="chip" id="dchip">Por registar</span></div>
+        <button class="icon" id="next" aria-label="Dia seguinte">›</button>
       </div>
       <div class="big">
-        <button class="icon" id="minus">−1k</button>
-        <input id="steps" type="number" inputmode="numeric" min="0" placeholder="0" aria-label="Passos do dia">
-        <button class="icon" id="plus">+1k</button>
+        <button class="icon" id="minus" aria-label="Menos mil passos">−1k</button>
+        <label class="sr-only" for="steps">Passos do dia</label>
+        <input id="steps" type="number" inputmode="numeric" min="0" placeholder="0">
+        <button class="icon" id="plus" aria-label="Mais mil passos">+1k</button>
       </div>
-      <p class="fb" id="fb"></p>
+      <p class="fb" id="fb" role="status" aria-live="polite"></p>
       <div class="btns"><button class="btn" id="save">Guardar dia</button><button class="btn ghost" id="clear">Apagar</button></div>
       <div class="datein"><label for="date">Escolher outro dia</label><input type="date" id="date"></div>
       <button class="linkbtn" id="todo" hidden></button>
@@ -222,12 +238,12 @@
   </section>
 
   <!-- CALENDÁRIO -->
-  <section class="view" id="v-cal">
+  <section class="view" id="v-cal" role="tabpanel" aria-labelledby="t-cal" hidden>
     <div class="glass">
       <div class="eyebrow">8 de novembro a 31 de dezembro</div>
       <h2>Mapa de calor</h2>
-      <div class="cal" id="cal"></div>
-      <div class="scale" id="scale"></div>
+      <div class="cal" id="cal" role="group" aria-label="Calendário de passos, de 8 de novembro a 31 de dezembro"></div>
+      <div class="scale" id="scale" aria-hidden="true"></div>
       <div class="scalel"><span>0</span><span id="sc1"></span><span id="sc2">meta</span></div>
     </div>
     <div class="glass">
@@ -235,35 +251,37 @@
         <div><h2>Cada dia, uma barra</h2><p class="mut" style="margin:6px 0 0">A linha tracejada é a meta de <span id="glab"></span>.</p></div>
         <span class="chip" id="ndays" style="margin:0">0 dias</span>
       </div>
-      <svg id="chart" viewBox="0 0 600 200" preserveAspectRatio="none" hidden></svg>
+      <svg id="chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Gráfico de barras" hidden></svg>
       <div class="empty" id="empty"><div style="font-size:1.7rem">👣</div><b>O teu gráfico começa aqui.</b>Regista o primeiro dia e vê a barra crescer.</div>
     </div>
   </section>
 
   <!-- SEMANAS -->
-  <section class="view" id="v-sem">
+  <section class="view" id="v-sem" role="tabpanel" aria-labelledby="t-sem" hidden>
     <div class="glass">
       <div class="eyebrow">Período completo</div>
       <h2>Resumo</h2>
       <div class="rows" id="sum" style="margin-top:8px"></div>
     </div>
+    <h2 class="sr-only">Total por semana</h2>
     <div id="weeks" style="display:grid;gap:14px"></div>
   </section>
 
   <!-- MAIS -->
-  <section class="view" id="v-mais">
+  <section class="view" id="v-mais" role="tabpanel" aria-labelledby="t-mais" hidden>
     <div class="glass">
       <div class="eyebrow">E se…?</div>
       <h2>Simulador de fim de ano</h2>
       <p class="mut" style="margin:8px 0 0">Escolhe quantos passos fazes por dia até 31 dez e vê com que média fechas 2026.</p>
+      <label class="sr-only" for="sim">Passos por dia até 31 de dezembro</label>
       <input type="range" id="sim" min="8000" max="30000" step="100">
       <div class="mut" id="simval" style="font-weight:600"></div>
       <div class="simout grad" id="simout"></div>
-      <p class="mut" id="simtxt"></p>
+      <p class="mut" id="simtxt" aria-live="polite" aria-atomic="true"></p>
       <button class="linkbtn" id="simpace"></button>
     </div>
     <div class="glass">
-      <h3>Os teus dados</h3>
+      <h2 style="font-size:1.35rem">Os teus dados</h2>
       <p class="mut" style="margin:8px 0 14px">Ficam guardados neste dispositivo. Exporta para teres cópia de segurança ou para mudar de telemóvel.</p>
       <div class="btns" style="grid-template-columns:1fr 1fr">
         <button class="btn ghost" id="exp">Exportar JSON</button><button class="btn ghost" id="csv">Exportar CSV</button>
@@ -275,17 +293,17 @@
         <input class="plain" type="number" id="base" inputmode="decimal" step="any" min="1">
         <p class="mut" style="font-size:.82rem;margin-top:8px">Por defeito usa o total exato que dá 970 476 passos em falta.</p></div>
       </details>
-      <div class="msg" id="msg"></div>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </div>
   </section>
 </main>
 
-<nav class="tabs" id="tabs">
-  <button data-v="hoje" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Hoje</button>
-  <button data-v="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Calendário</button>
-  <button data-v="sem"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Semanas</button>
-  <button data-v="mais"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Mais</button>
-</nav>
+<nav class="tabs" aria-label="Secções principais"><div id="tabs" role="tablist" aria-label="Secções" style="display:flex;gap:4px;width:100%">
+  <button role="tab" id="t-hoje" data-v="hoje" aria-controls="v-hoje" aria-selected="true" tabindex="0" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Hoje</button>
+  <button role="tab" id="t-cal" data-v="cal" aria-controls="v-cal" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Calendário</button>
+  <button role="tab" id="t-sem" data-v="sem" aria-controls="v-sem" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Semanas</button>
+  <button role="tab" id="t-mais" data-v="mais" aria-controls="v-mais" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Mais</button>
+</div></nav>
 
 <script>
 (function () {
@@ -344,7 +362,7 @@
     days.forEach(function (x) { var dd = fromKey(x); if (toKey(new Date(dd.getTime() - ((dd.getUTCDay() + 6) % 7) * 86400000)) === toKey(mon)) out.push(x); });
     return out;
   }
-  function setArc(id, p) { $(id).setAttribute('stroke-dasharray', Math.max(0, Math.min(100, p)) + ' 100'); }
+  function setArc(id, p) { p = Math.max(0, Math.min(100, p)); var el = $(id); el.setAttribute('stroke-dasharray', p + ' 100'); el.style.strokeOpacity = p < 0.3 ? 0 : 1; }
 
   function render() {
     var days = allDays(), today = todayKey(), N = days.length;
@@ -397,14 +415,15 @@
     feedback();
 
     // heatmap
-    var head = ['seg','ter','qua','qui','sex','sáb','dom'].map(function (x) { return '<div class="h">' + x + '</div>'; }).join('');
+    var head = ['seg','ter','qua','qui','sex','sáb','dom'].map(function (x) { return '<div class="h" aria-hidden="true">' + x + '</div>'; }).join('');
     var off = (fromKey(days[0]).getUTCDay() + 6) % 7, cells = '';
-    for (var b = 0; b < off; b++) cells += '<div class="blank"></div>';
+    for (var b = 0; b < off; b++) cells += '<div class="blank" aria-hidden="true"></div>';
     days.forEach(function (k, idx) {
-      var v = state.steps[k], d = fromKey(k), mo = (idx === 0 || d.getUTCDate() === 1) ? ' ' + MO[d.getUTCMonth()].toLowerCase() : '';
+      var v = state.steps[k], d = fromKey(k), mo = '';
       var col = v != null ? heat(v) : '';
+      var al = longLabel(k) + (k === today ? ' (hoje)' : '') + ': ' + (v == null ? 'sem registo' : fmt(v) + ' passos, ' + (v >= G ? 'meta cumprida' : v >= LOW ? 'perto da meta' : 'abaixo de ' + fmt(LOW)));
       cells += '<button class="cell' + (v != null ? ' has' : '') + (v >= G ? ' hit' : '') + (k > today ? ' future' : '') + (k === today ? ' today' : '') + (k === sel ? ' sel' : '') +
-        '" data-k="' + k + '"' + (v != null ? ' style="background:' + col + ';--c:' + col + '"' : '') + '><b>' + d.getUTCDate() + mo + '</b><span>' + (v != null ? short(v) : '·') + '</span></button>';
+        '" data-k="' + k + '" aria-label="' + al + '" aria-pressed="' + (k === sel) + '"' + (k === today ? ' aria-current="date"' : '') + (v != null ? ' style="background:' + col + ';--c:' + col + '"' : '') + '><b>' + d.getUTCDate() + mo + '</b><span>' + (v != null ? short(v) : '·') + '</span></button>';
     });
     $('cal').innerHTML = head + cells;
     $('scale').style.background = 'linear-gradient(90deg,' + stops().map(function (s) { return 'rgb(' + s[1].join(',') + ') ' + (s[0] / 1.15 * 100).toFixed(1) + '%'; }).join(',') + ')';
@@ -413,6 +432,7 @@
     // gráfico
     $('glab').textContent = fmt(G);
     $('ndays').textContent = logged.length + (logged.length === 1 ? ' dia' : ' dias');
+    $('chart').setAttribute('aria-label', 'Gráfico de barras com os passos de ' + logged.length + ' dias registados. Meta diária ' + fmt(G) + '. Melhor dia ' + fmt(best) + '.');
     $('chart').hidden = !logged.length; $('empty').hidden = !!logged.length;
     if (logged.length) {
       var W = 600, H = 200, bw = W / N, max = Math.max(G, best, 1) * 1.12;
@@ -451,16 +471,16 @@
         var v = state.steps[k]; var h = v != null ? Math.max(8, Math.min(100, 100 * v / (G * 1.2))) : 8;
         return '<i style="height:' + h + '%;' + (v != null ? 'background:' + heat(v) : '') + '" title="' + label(k) + '"></i>';
       }).join('');
-      return '<div class="glass wk"><div class="top"><div><div class="eyebrow">Semana ' + (n + 1) + '</div><h3 style="margin-top:4px">' + label(ws[0]) + (ws.length > 1 ? ' – ' + label(ws[ws.length - 1]) : '') + '</h3></div>' +
+      return '<article class="glass wk" aria-label="Semana ' + (n + 1) + '"><div class="top"><div><div class="eyebrow">Semana ' + (n + 1) + '</div><h3 style="margin-top:4px">' + label(ws[0]) + (ws.length > 1 ? ' – ' + label(ws[ws.length - 1]) : '') + '</h3></div>' +
         '<div style="text-align:right"><div class="big2">' + fmt(t) + '</div><small>' + lg.length + ' de ' + ws.length + (ws.length === 1 ? ' dia' : ' dias') + '</small></div></div>' +
-        '<div class="spark sm" style="--n:' + ws.length + '">' + sp + '</div>' +
-        '<div class="meter"><i style="width:' + Math.min(100, p) + '%;background:' + col + '"></i></div>' +
-        '<div style="display:flex;justify-content:space-between"><small>média ' + (lg.length ? fmt(a) : '—') + ' / dia</small><small>' + p + '% de ' + fmt(goalW) + '</small></div></div>';
+        '<div class="spark sm" aria-hidden="true" style="--n:' + ws.length + '">' + sp + '</div>' +
+        '<div class="meter" role="progressbar" aria-label="Progresso da semana ' + (n + 1) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.min(100, p) + '"><i style="width:' + Math.min(100, p) + '%;background:' + col + '"></i></div>' +
+        '<div style="display:flex;justify-content:space-between"><small>média ' + (lg.length ? fmt(a) : '—') + ' / dia</small><small>' + p + '% de ' + fmt(goalW) + '</small></div></article>';
     }).join('');
 
     // simulador
     if (simVal == null) simVal = G;
-    $('sim').value = simVal;
+    $('sim').value = simVal; $('sim').setAttribute('aria-valuetext', fmt(simVal) + ' passos por dia');
     var simYear = (state.baseTotal + total + simVal * remaining) / YEAR_DAYS;
     $('simval').textContent = fmt(simVal) + ' passos por dia · ' + remaining + (remaining === 1 ? ' dia por viver' : ' dias por viver');
     $('simout').textContent = fmt(simYear);
@@ -486,9 +506,11 @@
     render();
   }
   function go(v) {
-    document.querySelectorAll('.view').forEach(function (e) { e.classList.toggle('active', e.id === 'v-' + v); });
-    document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.view').forEach(function (e) { var on = e.id === 'v-' + v; e.classList.toggle('active', on); e.hidden = !on; });
+    document.querySelectorAll('#tabs [role=tab]').forEach(function (b) {
+      var on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1;
+    });
+    window.scrollTo(0, 0);
   }
   function setDay(k, v) {
     if (v === '' || v == null || isNaN(v) || +v < 0) delete state.steps[k]; else state.steps[k] = Math.round(+v);
@@ -510,6 +532,13 @@
   }
 
   $('tabs').onclick = function (e) { var b = e.target.closest('button'); if (b) go(b.dataset.v); };
+  $('tabs').onkeydown = function (e) {
+    var tabs = [].slice.call(document.querySelectorAll('#tabs [role=tab]')), i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+    if (n < 0) return;
+    e.preventDefault(); n = (n + tabs.length) % tabs.length; tabs[n].focus(); go(tabs[n].dataset.v);
+  };
   $('steps').oninput = feedback;
   $('minus').onclick = function () { $('steps').value = Math.max(0, (+$('steps').value || 0) - 1000); feedback(); };
   $('plus').onclick = function () { $('steps').value = (+$('steps').value || 0) + 1000; feedback(); };
@@ -529,7 +558,7 @@
   $('next').onclick = function () { pick(addDays(sel, 1)); };
   $('date').onchange = function (e) { if (e.target.value) pick(e.target.value); };
   $('todo').onclick = function (e) { if (e.currentTarget.dataset.k) pick(e.currentTarget.dataset.k); };
-  $('cal').onclick = function (e) { var c = e.target.closest('.cell'); if (c) { pick(c.dataset.k); go('hoje'); } };
+  $('cal').onclick = function (e) { var c = e.target.closest('.cell'); if (c) { pick(c.dataset.k); go('hoje'); $('dtitle').focus({ preventScroll: true }); } };
   $('sim').oninput = function (e) { simVal = +e.target.value; render(); };
   $('simpace').onclick = function (e) { simVal = Math.min(30000, Math.max(8000, +e.currentTarget.dataset.v)); render(); };
   $('base').onchange = function (e) { var v = parseFloat(e.target.value); if (v > 0) { state.baseTotal = v * BASE_DAYS; persist(); render(); } };
