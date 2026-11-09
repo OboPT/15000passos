@@ -2,141 +2,258 @@
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Passos até ao fim do ano</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141d1a">
+<meta name="color-scheme" content="dark">
+<title>Tracker visual de passos 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#f6f7f9; --card:#fff; --tx:#1b1f24; --mut:#6b7280; --ac:#2563eb; --bd:#e5e7eb;
-          --ok:#16a34a; --near:#f59e0b; --low:#ef4444; --none:#d1d5db; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#111418; --card:#1a1f26; --tx:#e8eaed; --mut:#9aa3af; --ac:#60a5fa; --bd:#2a313a;
-            --ok:#4ade80; --near:#fbbf24; --low:#f87171; --none:#3a424d; }
+  :root {
+    --bg:#141d1a; --card:#222e2a; --deep:#18211e; --line:#34443e; --tx:#f6f1e7; --mut:#a3b3ab;
+    --teal:#2dd4bf; --ok:#7ddf94; --okbg:#1f3a2a; --near:#f5c04f; --nearbg:#3f3220;
+    --low:#f0827a; --lowbg:#4a2a28; --grey:#b8c2bd; --greybg:#1a2220; --none:#2c3a35;
+    --serif:'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans:'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
-  * { box-sizing:border-box; }
-  body { margin:0; font:16px/1.4 system-ui,-apple-system,Segoe UI,sans-serif; background:var(--bg); color:var(--tx); }
-  main { max-width:720px; margin:0 auto; padding:16px; }
-  h1 { font-size:1.35rem; margin:8px 0 14px; }
-  h2 { font-size:1rem; margin:0 0 10px; }
-  .card { background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:14px; margin-bottom:14px; }
-  .hero { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
-  .ring { position:relative; width:170px; height:170px; flex:none; margin:0 auto; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { color-scheme:dark; }
+  body { margin:0; font:400 16px/1.45 var(--sans); color:var(--tx);
+         background:radial-gradient(900px 500px at 50% -120px,#1f332d 0,transparent 70%),var(--bg);
+         padding-bottom:env(safe-area-inset-bottom); }
+  main { max-width:640px; margin:0 auto; padding:16px 14px 40px; display:grid; gap:16px; }
+  h2,h3 { font-family:var(--serif); font-weight:800; margin:0; letter-spacing:-.01em; line-height:1.1; }
+  h2 { font-size:1.75rem; }
+  p { margin:0; }
+  .eyebrow { font-size:.72rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--teal); }
+  .mut { color:var(--mut); }
+  .card { background:var(--card); border-radius:32px; padding:22px 20px; }
+  .deep { background:var(--deep); border-radius:22px; }
+
+  /* HERO */
+  .hero { background:linear-gradient(160deg,#37ddc7 0%,#28c9b5 100%); color:#fff; border-radius:36px; padding:24px 20px 28px; position:relative; overflow:hidden; }
+  .hero .tag { display:flex; gap:8px; align-items:center; font-weight:500; color:rgba(255,255,255,.9); }
+  .hero h1 { font-family:var(--serif); font-weight:800; font-size:clamp(2.1rem,9.5vw,2.9rem); line-height:1.02; margin:12px 0 14px; letter-spacing:-.02em; }
+  .hero .lead { color:rgba(255,255,255,.92); font-size:1.05rem; }
+  .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  .tile { background:rgba(255,255,255,.17); border-radius:22px; padding:14px 12px; min-width:0; }
+  .tile small { display:block; font-size:.66rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.85); min-height:2.4em; }
+  .tile b { display:block; font-family:var(--serif); font-weight:800; font-size:clamp(1.1rem,5.4vw,1.6rem); margin:4px 0 2px; white-space:nowrap; }
+  .tile span { font-size:.8rem; color:rgba(255,255,255,.85); }
+  .ring { position:relative; width:230px; max-width:70%; aspect-ratio:1; margin:26px auto 4px; }
   .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
-  .ring .c { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-  .ring .c b { font-size:1.9rem; line-height:1; }
-  .ring .c span { font-size:.75rem; color:var(--mut); margin-top:4px; }
-  .stats { flex:1; min-width:220px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-  .stat b { display:block; font-size:1.15rem; }
-  .stat span { color:var(--mut); font-size:.78rem; }
-  label { font-size:.85rem; color:var(--mut); display:block; margin-bottom:4px; }
-  input { font:inherit; color:inherit; background:var(--bg); border:1px solid var(--bd); border-radius:10px; padding:10px; width:100%; }
-  button { font:inherit; border:0; border-radius:10px; padding:10px 14px; background:var(--ac); color:#fff; cursor:pointer; }
-  button.sec { background:transparent; color:var(--ac); border:1px solid var(--bd); }
-  .row { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
-  .row > div { flex:1; min-width:120px; }
-  .cal { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
-  .cal .h { text-align:center; font-size:.7rem; color:var(--mut); }
-  .cell { aspect-ratio:1/1.05; border-radius:8px; background:var(--none); color:#fff; border:2px solid transparent;
-          display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:.7rem; cursor:pointer; padding:0; line-height:1.15; }
-  .cell b { font-size:.9rem; }
-  .cell.ok { background:var(--ok); } .cell.near { background:var(--near); color:#1b1f24; } .cell.low { background:var(--low); }
-  .cell.none { background:var(--none); color:var(--tx); opacity:.75; }
-  .cell.future { opacity:.4; }
+  .ring circle { transition:stroke-dasharray .9s cubic-bezier(.2,.8,.2,1); }
+  .ring .c { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 34px; }
+  .ring .c b { font-family:var(--serif); font-weight:800; font-size:2.6rem; line-height:1; }
+  .ring .c span { font-size:.92rem; font-weight:500; margin-top:6px; line-height:1.25; }
+
+  /* REGISTO */
+  .daytop { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .chip { display:inline-block; padding:8px 14px; border-radius:99px; font-size:.82rem; font-weight:700; background:var(--deep); color:var(--grey); white-space:nowrap; }
+  .chip.ok { background:var(--okbg); color:var(--ok); } .chip.near { background:var(--nearbg); color:var(--near); }
+  .chip.low { background:var(--lowbg); color:var(--low); } .chip.grey { background:var(--greybg); color:var(--grey); }
+  .dtitle { font-size:clamp(1.7rem,8vw,2.3rem); margin:8px 0 14px; }
+  .bignum { display:flex; align-items:center; gap:10px; background:var(--deep); border-radius:22px; padding:8px; }
+  .bignum input { flex:1; min-width:0; background:transparent; border:0; outline:0; color:var(--tx); font:800 2.1rem var(--serif); text-align:center; }
+  .bignum input::placeholder { color:#51635b; }
+  .round { width:48px; height:48px; border-radius:50%; border:0; background:var(--card); color:var(--tx); font:700 .8rem var(--sans); cursor:pointer; flex:none; }
+  .round:active { transform:scale(.94); }
+  .fb { margin:12px 2px; font-size:.95rem; color:var(--mut); min-height:1.4em; }
+  .btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; border:0; border-radius:20px; padding:16px; font:700 1rem var(--sans); cursor:pointer; background:var(--teal); color:#0b2a25; }
+  .btn.dark { background:var(--deep); color:var(--tx); }
+  .btn:active { transform:scale(.985); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+  .navrow { display:flex; gap:10px; margin-top:14px; align-items:end; }
+  .navrow .round { width:52px; height:52px; font-size:1.2rem; }
+  .navrow div { flex:1; }
+  label { display:block; font-size:.78rem; color:var(--mut); margin-bottom:4px; }
+  input[type=date], input[type=number].plain { width:100%; background:var(--deep); border:0; border-radius:16px; padding:14px; color:var(--tx); font:500 1rem var(--sans); color-scheme:dark; }
+  .linkbtn { background:none; border:0; color:var(--teal); font:700 .9rem var(--sans); padding:8px 0 0; cursor:pointer; text-align:left; }
+
+  /* CALENDÁRIO */
+  .legend { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  .cal { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:16px; }
+  .cal .h { text-align:center; font-size:.68rem; color:var(--mut); text-transform:uppercase; letter-spacing:.08em; }
+  .cell { aspect-ratio:1/1.1; border-radius:14px; border:2px solid transparent; background:var(--none); color:var(--tx);
+          display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.15; padding:0; cursor:pointer; font-family:var(--sans); }
+  .cell b { font-size:.95rem; } .cell span { font-size:.66rem; opacity:.95; }
+  .cell.ok { background:#2f9d55; } .cell.near { background:#d9a21b; color:#231a05; } .cell.low { background:#c8574f; }
+  .cell.future { opacity:.45; }
+  .cell.today { box-shadow:0 0 0 2px var(--teal); }
   .cell.sel { border-color:var(--tx); }
-  .cell.today { box-shadow:0 0 0 2px var(--ac); }
   .blank { visibility:hidden; }
-  .legend { display:flex; gap:12px; flex-wrap:wrap; font-size:.75rem; color:var(--mut); margin-top:10px; }
-  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; vertical-align:-1px; }
-  #chart { width:100%; height:200px; display:block; }
-  .msg { font-size:.85rem; color:var(--mut); min-height:1.2em; margin-top:8px; }
-  table { width:100%; border-collapse:collapse; font-size:.95rem; }
-  td { padding:7px 0; border-top:1px solid var(--bd); }
-  tr:first-child td { border-top:0; }
-  td:last-child { text-align:right; font-weight:600; }
+
+  /* GRÁFICO */
+  .head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .head p { margin-top:8px; }
+  #chart { width:100%; height:210px; display:block; margin-top:18px; }
+  .empty { margin-top:18px; border:1.5px dashed var(--line); border-radius:22px; padding:34px 20px; text-align:center; }
+  .empty .ic { font-size:1.8rem; opacity:.7; }
+  .empty b { display:block; margin:6px 0 4px; font-size:1.1rem; }
+
+  /* SIMULADOR */
+  input[type=range] { width:100%; accent-color:var(--teal); margin:18px 0 6px; }
+  .simout { font-family:var(--serif); font-weight:800; font-size:2.3rem; line-height:1; margin:10px 0 8px; }
+  .simout.ok { color:var(--ok); } .simout.low { color:var(--near); }
+
+  /* RESUMO / SEMANAS */
+  .rows > div { display:flex; justify-content:space-between; align-items:baseline; padding:17px 0; border-top:1px solid var(--line); gap:12px; }
+  .rows > div:first-child { border-top:0; }
+  .rows span { color:var(--mut); }
+  .rows b { font-family:var(--serif); font-weight:800; font-size:1.4rem; text-align:right; }
+  .rows b.g { color:var(--ok); } .rows b.r { color:var(--low); }
+  .week { margin-top:14px; border:1px solid var(--line); border-radius:26px; padding:18px; background:var(--deep); }
+  .week h3 { font-size:1.35rem; }
+  .week .rows > div { padding:6px 0; border:0; }
+  .week .rows b { font:700 1rem var(--sans); }
+  .bar { height:12px; background:var(--card); border-radius:99px; overflow:hidden; margin:16px 0 10px; }
+  .bar i { display:block; height:100%; border-radius:99px; background:var(--none); transition:width .6s; }
+  .bar i.ok { background:#2f9d55; } .bar i.near { background:#d9a21b; } .bar i.low { background:#c8574f; }
+  .wpct { font-weight:700; font-size:.95rem; }
+  details summary { cursor:pointer; font-weight:700; color:var(--teal); }
+  .msg { font-size:.88rem; color:var(--mut); margin-top:10px; min-height:1.2em; }
+
+  /* confetti */
+  .cf { position:fixed; left:50%; top:45%; width:9px; height:14px; border-radius:2px; pointer-events:none; z-index:50; animation:cf 1.2s ease-out forwards; }
+  @keyframes cf { to { transform:translate(var(--x),var(--y)) rotate(var(--r)); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { .cf { display:none; } .ring circle,.bar i { transition:none; } }
 </style>
 </head>
 <body>
 <main>
-  <h1>👟 Passos até 31 de dezembro</h1>
 
-  <section class="card hero">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="tag"><span>✦</span><span id="tag">Falta pouco. Cada passo conta.</span></div>
+    <h1 id="h1">Estás a construir a tua média.</h1>
+    <p class="lead">Regista o dia, vê o ritmo e mantém o foco. O objetivo é simples: terminar o ano com uma média de 15.000 passos por dia.</p>
+    <div class="tiles" id="tiles"></div>
     <div class="ring">
       <svg viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="52" fill="none" stroke="var(--bd)" stroke-width="12"/>
-        <circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="var(--ac)" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="10"/>
+        <circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
       </svg>
-      <div class="c"><b id="pct">0%</b><span id="left">faltam —</span></div>
+      <div class="c"><b id="pct">0,0%</b><span>dos passos em falta já conseguidos</span></div>
     </div>
-    <div class="stats" id="stats"></div>
   </section>
 
-  <section class="card">
-    <h2>Registar passos</h2>
-    <div class="row">
-      <div><label for="date">Dia</label><input type="date" id="date"></div>
-      <div><label for="steps">Passos</label><input type="number" id="steps" inputmode="numeric" min="0" placeholder="ex.: 18500"></div>
-      <button id="save">Guardar</button>
-      <button class="sec" id="clear">Apagar</button>
+  <!-- REGISTO DO DIA -->
+  <section class="card" id="registo">
+    <div class="daytop">
+      <div class="eyebrow" id="deyebrow">Registo do dia</div>
+      <span class="chip" id="dchip">Por registar</span>
     </div>
-    <div class="row" style="margin-top:12px">
-      <div><label for="base">Média de 2026 até ao fim de 8 nov (312 dias)</label><input type="number" id="base" inputmode="decimal" min="1" step="any"></div>
+    <h2 class="dtitle" id="dtitle">—</h2>
+    <div class="bignum">
+      <button class="round" id="minus" aria-label="menos mil">−1k</button>
+      <input id="steps" type="number" inputmode="numeric" min="0" placeholder="0" aria-label="Passos do dia">
+      <button class="round" id="plus" aria-label="mais mil">+1k</button>
     </div>
-    <div class="msg" id="msg"></div>
+    <p class="fb" id="fb"></p>
+    <div class="row2">
+      <button class="btn" id="save">Guardar dia</button>
+      <button class="btn dark" id="clear">Apagar</button>
+    </div>
+    <div class="navrow">
+      <button class="round" id="prev" aria-label="dia anterior">‹</button>
+      <div><label for="date">Escolher outro dia</label><input type="date" id="date"></div>
+      <button class="round" id="next" aria-label="dia seguinte">›</button>
+    </div>
+    <button class="linkbtn" id="todo" hidden></button>
   </section>
 
+  <!-- CALENDÁRIO -->
   <section class="card">
-    <h2>Calendário</h2>
+    <div class="eyebrow">8 de novembro a 31 de dezembro</div>
+    <h2 style="margin-top:8px">O teu calendário</h2>
     <div class="cal" id="cal"></div>
-    <div class="legend">
-      <span><i style="background:var(--ok)"></i>meta cumprida</span>
-      <span><i style="background:var(--near)"></i>perto (≥ 80 %)</span>
-      <span><i style="background:var(--low)"></i>abaixo</span>
-      <span><i style="background:var(--none)"></i>sem registo</span>
-    </div>
+    <div class="legend" id="legend"></div>
   </section>
 
+  <!-- GRÁFICO -->
   <section class="card">
-    <h2>Passos por dia</h2>
-    <svg id="chart" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
-    <div class="legend"><span>Linha tracejada = meta diária (<span id="glab"></span>)</span></div>
+    <div class="head">
+      <div>
+        <h2>Cada dia, uma barra</h2>
+        <p class="mut">A linha tracejada é a meta de <span id="glab"></span> passos.</p>
+      </div>
+      <span class="chip" id="ndays">0 dias</span>
+    </div>
+    <svg id="chart" viewBox="0 0 600 210" preserveAspectRatio="none" hidden></svg>
+    <div class="empty" id="empty"><div class="ic">👣</div><b>O teu gráfico começa aqui.</b><p class="mut">Regista o primeiro dia e vê a barra crescer.</p></div>
   </section>
 
+  <!-- SIMULADOR -->
+  <section class="card">
+    <div class="eyebrow">E se…?</div>
+    <h2 style="margin-top:8px">Simulador de fim de ano</h2>
+    <p class="mut" style="margin-top:8px">Arrasta e vê com que média fechas 2026 se fizeres este valor em cada dia que falta.</p>
+    <input type="range" id="sim" min="8000" max="30000" step="100">
+    <div class="mut" id="simval"></div>
+    <div class="simout" id="simout"></div>
+    <p id="simtxt" class="mut"></p>
+    <button class="linkbtn" id="simpace"></button>
+  </section>
+
+  <!-- RESUMO -->
   <section class="card">
     <h2>Resumo do período</h2>
-    <table id="sum"></table>
+    <div class="rows" id="sum" style="margin-top:8px"></div>
+    <button class="btn dark" id="first" style="margin-top:8px">Voltar ao primeiro dia &nbsp;›</button>
   </section>
 
+  <!-- SEMANAS -->
   <section class="card">
-    <div class="row">
-      <button class="sec" id="exp">Exportar JSON</button>
-      <button class="sec" id="csv">Exportar CSV</button>
-      <button class="sec" id="imp">Importar JSON</button>
-      <input type="file" id="file" accept="application/json" hidden>
+    <div class="eyebrow">Semanas de segunda a domingo</div>
+    <h2 style="margin:8px 0 10px">Total por semana</h2>
+    <p class="mut">Cada semana compara o total registado com a meta dessa semana.</p>
+    <div class="legend" id="wlegend"></div>
+    <div id="weeks"></div>
+  </section>
+
+  <!-- DADOS -->
+  <section class="card">
+    <h2 style="font-size:1.35rem">Os teus dados</h2>
+    <p class="mut" style="margin-top:8px">Ficam guardados neste browser. Exporta de vez em quando para teres cópia de segurança ou para passar para outro dispositivo.</p>
+    <div class="row2">
+      <button class="btn dark" id="exp">Exportar JSON</button>
+      <button class="btn dark" id="csv">Exportar CSV</button>
     </div>
-    <div class="msg">Os dados ficam guardados neste browser. Exporta de vez em quando para teres cópia de segurança.</div>
+    <div class="row2"><button class="btn dark" id="imp">Importar JSON</button><span></span></div>
+    <input type="file" id="file" accept="application/json" hidden>
+    <details style="margin-top:18px">
+      <summary>Ajustar ponto de partida</summary>
+      <div style="margin-top:12px">
+        <label for="base">Média de 2026 até ao fim de 7 nov (311 dias)</label>
+        <input class="plain" type="number" id="base" inputmode="decimal" step="any" min="1">
+        <p class="mut" style="font-size:.85rem;margin-top:8px">Só mexas aqui se precisares de acertar o valor de partida. Por defeito usa o total exato que dá 970 476 passos em falta.</p>
+      </div>
+    </details>
+    <div class="msg" id="msg"></div>
   </section>
 </main>
 
 <script>
 (function () {
-  var KEY = 'passos-2026-v1';
-  // Objetivo: 15 000 passos de média diária em 2026 (365 dias).
-  // Até ao fim de 8 nov (312 dias) a média era 14 510; o registo começa a 9 nov.
-  var START = '2026-11-09', END = '2026-12-31', NEAR = 0.8;
-  var YEAR_DAYS = 365, YEAR_AVG = 15000, BASE_DAYS = 312;
-  var state = { base: 14510, steps: {} };
-  var sel = null;
+  var KEY = 'passos-2026-v2';
+  var START = '2026-11-08', END = '2026-12-31';
+  var YEAR_DAYS = 365, YEAR_TOTAL = 15000 * YEAR_DAYS, BASE_DAYS = 311, LOW = 14000;
+  var state = { baseTotal: 4504524, steps: {} };
+  var sel = null, simVal = null;
 
   function $(id) { return document.getElementById(id); }
+  function say(t) { $('msg').textContent = t; }
   function load() {
     try {
       var s = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (s && s.steps) state = { base: s.base > 0 ? s.base : 14510, steps: s.steps };
+      if (s && s.steps) state = { baseTotal: s.baseTotal > 0 ? s.baseTotal : 4504524, steps: s.steps };
     } catch (e) {}
   }
   function persist() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); }
     catch (e) { say('Não foi possível guardar neste browser. Usa "Exportar JSON".'); }
   }
-  function say(t) { $('msg').textContent = t; }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function toKey(d) { return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()); }
@@ -147,86 +264,159 @@
     while (d <= e) { out.push(toKey(d)); d = new Date(d.getTime() + 86400000); }
     return out;
   }
-  var MO = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  var DIAS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  var MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  var MO = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   function label(k) { var d = fromKey(k); return d.getUTCDate() + ' ' + MO[d.getUTCMonth()]; }
-  function fmt(n) { return Math.round(n).toLocaleString('pt-PT'); }
+  function longLabel(k) { var d = fromKey(k); return DIAS[d.getUTCDay()] + ', ' + d.getUTCDate() + ' de ' + MESES[d.getUTCMonth()]; }
+  function fmt(n) { return Math.round(n).toLocaleString('pt-PT', { useGrouping: 'always' }); }
+  function dot(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
   function short(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace('.', ',') + 'k' : String(n); }
+  function pctTxt(p) { return p.toFixed(1).replace('.', ',') + '%'; }
+
+  var G = 17972; // meta diária (recalculada em render)
+  function cls(v) { return v >= G ? 'ok' : v >= LOW ? 'near' : 'low'; }
 
   function render() {
     var days = allDays(), today = todayKey(), N = days.length;
-    var baseTotal = state.base * BASE_DAYS, yearTotal = YEAR_AVG * YEAR_DAYS;
-    var toGo = Math.max(0, yearTotal - baseTotal);          // passos necessários desde 9 nov
-    var g = toGo / N;                                        // meta diária para fechar o ano
+    var toGo = Math.max(0, YEAR_TOTAL - state.baseTotal);
+    G = Math.ceil(toGo / N);
     var logged = days.filter(function (k) { return state.steps[k] != null; });
     var total = logged.reduce(function (a, k) { return a + state.steps[k]; }, 0);
-    var avg = logged.length ? total / logged.length : 0;     // média desde 9 nov
+    var avg = logged.length ? total / logged.length : 0;
     var missing = Math.max(0, toGo - total);
     var remaining = days.filter(function (k) { return k >= today && state.steps[k] == null; }).length;
-    var pace = logged.length ? avg : state.base;             // ritmo usado na projeção
-    var projYear = (baseTotal + total + pace * remaining) / YEAR_DAYS;
-    var curYear = (baseTotal + total) / (BASE_DAYS + logged.length);
+    var basePace = state.baseTotal / BASE_DAYS;
+    var pace = logged.length ? avg : basePace;
+    var projYear = (state.baseTotal + total + pace * remaining) / YEAR_DAYS;
+    var curYear = (state.baseTotal + total) / (BASE_DAYS + logged.length);
     var need = remaining ? missing / remaining : 0;
     var pct = toGo ? Math.min(100, 100 * total / toGo) : 100;
+    var above = logged.filter(function (k) { return state.steps[k] >= G; }).length;
+    var best = logged.reduce(function (a, k) { return Math.max(a, state.steps[k]); }, 0);
 
+    // hero
+    $('tag').textContent = missing === 0 ? 'Objetivo cumprido. Que bomba!' :
+      !logged.length ? 'Falta pouco. Cada passo conta.' :
+      projYear >= 15000 ? 'Estás no caminho certo.' : 'Ainda dá para lá chegar.';
+    $('h1').textContent = missing === 0 ? 'Os 15.000 são teus.' : 'Estás a construir a tua média.';
+    $('tiles').innerHTML = [
+      ['Média até agora', fmt(curYear), 'passos por dia'],
+      ['Meta diária', fmt(G), 'passos por dia'],
+      ['Faltam', fmt(missing), 'passos para a meta']
+    ].map(function (t) { return '<div class="tile"><small>' + t[0] + '</small><b>' + t[1] + '</b><span>' + t[2] + '</span></div>'; }).join('');
     $('arc').setAttribute('stroke-dasharray', pct + ' 100');
-    $('pct').textContent = Math.round(pct) + '%';
-    $('left').textContent = missing ? 'faltam ' + fmt(missing) : 'meta atingida!';
+    $('pct').textContent = pctTxt(pct);
 
-    var st = [
-      [fmt(curYear), 'média atual de 2026'],
-      [fmt(g), 'meta diária (de 9 nov a 31 dez)'],
-      [fmt(total), 'total acumulado desde 9 nov'],
-      [fmt(projYear), 'média projetada a 31 dez'],
-      [logged.length ? fmt(avg) : '—', 'média diária desde 9 nov'],
-      [remaining ? fmt(need) : '—', 'necessário / dia daqui para a frente']
-    ];
-    $('stats').innerHTML = st.map(function (s) {
-      return '<div class="stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>';
-    }).join('');
+    // registo (estado guardado)
+    var sv = state.steps[sel];
+    $('deyebrow').textContent = 'Registo do dia' + (sel === today ? ' · hoje' : '');
+    $('dtitle').textContent = longLabel(sel);
+    var chip = $('dchip');
+    chip.className = 'chip ' + (sv != null ? cls(sv) : '');
+    chip.textContent = sv == null ? 'Por registar' : sv >= G ? 'Meta cumprida' : 'Registado';
+    var pend = days.filter(function (k) { return k < today && state.steps[k] == null; });
+    var todo = $('todo');
+    todo.hidden = !pend.length;
+    todo.textContent = pend.length ? 'Tens ' + pend.length + (pend.length === 1 ? ' dia passado por registar' : ' dias passados por registar') + ' · ir ao primeiro ›' : '';
+    todo.dataset.k = pend[0] || '';
+    feedback();
 
-    $('base').value = state.base;
-    $('glab').textContent = fmt(g);
-
-    // calendário (semana a começar à segunda)
+    // calendário
     var head = ['seg','ter','qua','qui','sex','sáb','dom'].map(function (x) { return '<div class="h">' + x + '</div>'; }).join('');
     var off = (fromKey(days[0]).getUTCDay() + 6) % 7, cells = '';
     for (var b = 0; b < off; b++) cells += '<div class="blank"></div>';
     days.forEach(function (k, idx) {
-      var v = state.steps[k], cls = 'none';
-      if (v != null) cls = v >= g ? 'ok' : v >= g * NEAR ? 'near' : 'low';
-      var d = fromKey(k), mo = (idx === 0 || d.getUTCDate() === 1) ? ' ' + MO[d.getUTCMonth()] : '';
-      cells += '<button class="cell ' + cls + (k > today ? ' future' : '') + (k === today ? ' today' : '') + (k === sel ? ' sel' : '') +
+      var v = state.steps[k], c = v != null ? cls(v) : '';
+      var d = fromKey(k), mo = (idx === 0 || d.getUTCDate() === 1) ? ' ' + MO[d.getUTCMonth()].toLowerCase() : '';
+      cells += '<button class="cell ' + c + (k > today ? ' future' : '') + (k === today ? ' today' : '') + (k === sel ? ' sel' : '') +
         '" data-k="' + k + '"><b>' + d.getUTCDate() + mo + '</b><span>' + (v != null ? short(v) : '·') + '</span></button>';
     });
     $('cal').innerHTML = head + cells;
+    var lg = '<span class="chip ok">● Meta cumprida</span><span class="chip near">● ' + dot(LOW) + ' a ' + dot(G - 1) + '</span>' +
+             '<span class="chip low">● Abaixo de ' + dot(LOW) + '</span><span class="chip grey">● Sem registo</span>';
+    $('legend').innerHTML = lg;
+    $('wlegend').innerHTML = '<span class="chip ok">● Média na meta</span><span class="chip near">● ' + dot(LOW) + ' a ' + dot(G - 1) + '</span><span class="chip grey">● Abaixo de ' + dot(LOW) + '</span>';
 
     // gráfico
-    var W = 600, H = 200, bw = W / N, best = logged.reduce(function (a, k) { return Math.max(a, state.steps[k]); }, 0);
-    var max = Math.max(g, best, 1) * 1.12;
-    var bars = days.map(function (k, j) {
-      var v = state.steps[k]; if (v == null) return '';
-      var h = H * v / max, c = v >= g ? 'var(--ok)' : v >= g * NEAR ? 'var(--near)' : 'var(--low)';
-      return '<rect x="' + (j * bw + 1) + '" y="' + (H - h) + '" width="' + Math.max(1, bw - 2) + '" height="' + h +
-        '" rx="2" fill="' + c + '"><title>' + label(k) + ': ' + fmt(v) + '</title></rect>';
-    }).join('');
-    var gy = H - H * g / max;
-    $('chart').innerHTML = bars + '<line x1="0" x2="' + W + '" y1="' + gy + '" y2="' + gy +
-      '" stroke="var(--tx)" stroke-width="1.5" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/>';
+    $('glab').textContent = fmt(G);
+    $('ndays').textContent = logged.length + (logged.length === 1 ? ' dia' : ' dias');
+    $('chart').hidden = !logged.length; $('empty').hidden = !!logged.length;
+    if (logged.length) {
+      var W = 600, H = 210, bw = W / N, max = Math.max(G, best, 1) * 1.12;
+      var bars = days.map(function (k, j) {
+        var v = state.steps[k]; if (v == null) return '';
+        var h = H * v / max, col = v >= G ? '#2f9d55' : v >= LOW ? '#d9a21b' : '#c8574f';
+        return '<rect x="' + (j * bw + 1.5) + '" y="' + (H - h) + '" width="' + Math.max(1, bw - 3) + '" height="' + h +
+               '" rx="3" fill="' + col + '"><title>' + label(k) + ': ' + fmt(v) + '</title></rect>';
+      }).join('');
+      var gy = H - H * G / max;
+      $('chart').innerHTML = bars + '<line x1="0" x2="' + W + '" y1="' + gy + '" y2="' + gy +
+        '" stroke="#f6f1e7" stroke-width="1.6" stroke-dasharray="7 6" vector-effect="non-scaling-stroke"/>';
+    }
+
+    // simulador
+    if (simVal == null) simVal = G;
+    var sl = $('sim'); sl.value = simVal;
+    var simYear = (state.baseTotal + total + simVal * remaining) / YEAR_DAYS;
+    $('simval').textContent = fmt(simVal) + ' passos por dia · ' + remaining + (remaining === 1 ? ' dia por viver' : ' dias por viver');
+    var so = $('simout'); so.textContent = fmt(simYear); so.className = 'simout ' + (simYear >= 15000 ? 'ok' : 'low');
+    $('simtxt').textContent = !remaining ? 'Já não há dias por registar.' :
+      simYear >= 15000 ? 'média final de 2026 — objetivo alcançado, com margem de ' + fmt(simYear - 15000) + '.' :
+      'média final de 2026 — ainda faltavam ' + fmt(15000 - simYear) + ' para os 15.000.';
+    $('simpace').textContent = 'Usar o meu ritmo atual (' + fmt(pace) + '/dia) ›';
+    $('simpace').dataset.v = Math.round(pace);
 
     // resumo
-    var above = logged.filter(function (k) { return state.steps[k] >= g; }).length;
-    var rows = [
-      ['Total', fmt(total)],
-      ['Média por dia registado', fmt(avg)],
-      ['Dias registados', logged.length + ' de ' + N],
-      ['Dias acima da meta', above],
-      ['Dias abaixo da meta', logged.length - above],
-      ['Melhor dia', best ? fmt(best) : '—']
-    ];
-    $('sum').innerHTML = rows.map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('');
+    var streak = 0, i = days.indexOf(today);
+    if (i < 0) i = today > END ? days.length - 1 : -1;
+    if (i >= 0) { if (!(state.steps[days[i]] >= G)) i--; for (; i >= 0 && state.steps[days[i]] >= G; i--) streak++; }
+    $('sum').innerHTML = [
+      ['Total registado', fmt(total), ''],
+      ['Média neste período', fmt(avg), ''],
+      ['Dias registados', logged.length + ' de ' + N, ''],
+      ['Dias acima da meta', above, 'g'],
+      ['Dias abaixo da meta', logged.length - above, 'r'],
+      ['Melhor dia', best ? fmt(best) : '0', ''],
+      ['Sequência na meta', streak + (streak === 1 ? ' dia' : ' dias'), '']
+    ].map(function (r) { return '<div><span>' + r[0] + '</span><b class="' + r[2] + '">' + r[1] + '</b></div>'; }).join('');
+
+    // semanas
+    var weeks = [], map = {};
+    days.forEach(function (k) {
+      var d = fromKey(k), mon = toKey(new Date(d.getTime() - ((d.getUTCDay() + 6) % 7) * 86400000));
+      if (!map[mon]) { map[mon] = []; weeks.push(map[mon]); }
+      map[mon].push(k);
+    });
+    $('weeks').innerHTML = weeks.map(function (ws, n) {
+      var lg2 = ws.filter(function (k) { return state.steps[k] != null; });
+      var t = lg2.reduce(function (a, k) { return a + state.steps[k]; }, 0), a = lg2.length ? t / lg2.length : 0;
+      var goalW = G * ws.length, p = goalW ? Math.round(100 * t / goalW) : 0, c = lg2.length ? cls(a) : '';
+      var title = 'Semana ' + (n + 1) + ': ' + label(ws[0]) + (ws.length > 1 ? ' a ' + label(ws[ws.length - 1]) : '');
+      return '<div class="week"><div class="head"><h3>' + title + '</h3><span class="chip">' + lg2.length + ' de ' + ws.length + (ws.length === 1 ? ' dia' : ' dias') + '</span></div>' +
+        '<div class="rows" style="margin-top:12px">' +
+        '<div><span>Total registado</span><b>' + fmt(t) + '</b></div>' +
+        '<div><span>Média por dia registado</span><b>' + fmt(a) + '</b></div>' +
+        '<div><span>Dias registados</span><b>' + lg2.length + ' de ' + ws.length + '</b></div>' +
+        '<div><span>Meta semanal</span><b>' + fmt(goalW) + '</b></div></div>' +
+        '<div class="bar"><i class="' + c + '" style="width:' + Math.min(100, p) + '%"></i></div>' +
+        '<div class="wpct">' + p + '% da meta semanal</div></div>';
+    }).join('');
+
+    $('base').value = Math.round(state.baseTotal / BASE_DAYS);
+  }
+
+  function feedback() {
+    var v = $('steps').value;
+    var el = $('fb');
+    if (v === '' || isNaN(v)) { el.textContent = 'Insere os passos de ' + (sel === todayKey() ? 'hoje' : 'este dia') + '.'; return; }
+    var diff = Math.round(+v) - G;
+    el.textContent = diff >= 0 ? (diff === 0 ? 'Na meta do dia. ' : '+' + fmt(diff) + ' acima da meta do dia. ') + '🎯' :
+                                 'Faltam ' + fmt(-diff) + ' para a meta do dia (' + fmt(G) + ').';
   }
 
   function pick(k) {
+    if (k < START) k = START; if (k > END) k = END;
     sel = k; $('date').value = k;
     var v = state.steps[k]; $('steps').value = v != null ? v : '';
     render();
@@ -234,7 +424,18 @@
   function setDay(k, v) {
     if (v === '' || v == null || isNaN(v) || +v < 0) delete state.steps[k];
     else state.steps[k] = Math.round(+v);
-    persist(); render();
+    persist();
+  }
+  function addDays(k, n) { return toKey(new Date(fromKey(k).getTime() + n * 86400000)); }
+
+  function burst() {
+    var cols = ['#2dd4bf', '#f5c04f', '#7ddf94', '#f6f1e7', '#f0827a'];
+    for (var i = 0; i < 28; i++) {
+      var s = document.createElement('span'); s.className = 'cf';
+      var a = Math.random() * Math.PI * 2, r = 90 + Math.random() * 170;
+      s.style.cssText = 'background:' + cols[i % 5] + ';--x:' + Math.cos(a) * r + 'px;--y:' + (Math.sin(a) * r + 80) + 'px;--r:' + (Math.random() * 720 - 360) + 'deg';
+      document.body.appendChild(s); setTimeout(function (el) { return function () { el.remove(); }; }(s), 1300);
+    }
   }
   function download(name, text, type) {
     var a = document.createElement('a');
@@ -242,22 +443,33 @@
     a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
 
+  $('steps').oninput = feedback;
+  $('minus').onclick = function () { var v = Math.max(0, (+$('steps').value || 0) - 1000); $('steps').value = v; feedback(); };
+  $('plus').onclick = function () { $('steps').value = (+$('steps').value || 0) + 1000; feedback(); };
   $('save').onclick = function () {
-    var k = $('date').value, v = $('steps').value;
-    if (!k || k < START || k > END) return say('Escolhe uma data entre 9 nov e 31 dez de 2026.');
-    if (v === '') return say('Indica o número de passos.');
-    sel = k; setDay(k, v); say('Guardado: ' + label(k) + ' — ' + fmt(v) + ' passos.');
+    var v = $('steps').value;
+    if (v === '' || isNaN(v) || +v < 0) { $('fb').textContent = 'Indica um número de passos válido.'; return; }
+    var was = state.steps[sel] >= G;
+    setDay(sel, v); render();
+    if (!was && +v >= G) burst();
+    $('fb').textContent = 'Guardado: ' + fmt(+v) + ' passos em ' + label(sel) + '.';
   };
   $('clear').onclick = function () {
-    var k = $('date').value; if (!k || state.steps[k] == null) return say('Esse dia não tem registo.');
-    setDay(k, ''); $('steps').value = ''; say('Registo de ' + label(k) + ' apagado.');
+    if (state.steps[sel] == null) { $('fb').textContent = 'Esse dia não tem registo.'; return; }
+    setDay(sel, ''); $('steps').value = ''; render();
   };
-  $('base').onchange = function (e) {
-    var v = parseFloat(e.target.value); if (v > 0) { state.base = v; persist(); render(); }
-  };
+  $('prev').onclick = function () { pick(addDays(sel, -1)); };
+  $('next').onclick = function () { pick(addDays(sel, 1)); };
   $('date').onchange = function (e) { if (e.target.value) pick(e.target.value); };
+  $('todo').onclick = function (e) { if (e.currentTarget.dataset.k) { pick(e.currentTarget.dataset.k); $('registo').scrollIntoView({ behavior: 'smooth' }); } };
+  $('first').onclick = function () { pick(START); $('registo').scrollIntoView({ behavior: 'smooth' }); };
   $('cal').onclick = function (e) {
-    var c = e.target.closest('.cell'); if (c) { pick(c.dataset.k); $('steps').focus(); }
+    var c = e.target.closest('.cell'); if (c) { pick(c.dataset.k); $('registo').scrollIntoView({ behavior: 'smooth' }); }
+  };
+  $('sim').oninput = function (e) { simVal = +e.target.value; render(); };
+  $('simpace').onclick = function (e) { simVal = Math.min(30000, Math.max(8000, +e.currentTarget.dataset.v)); render(); };
+  $('base').onchange = function (e) {
+    var v = parseFloat(e.target.value); if (v > 0) { state.baseTotal = v * BASE_DAYS; persist(); render(); }
   };
   $('exp').onclick = function () { download('passos-2026.json', JSON.stringify(state, null, 2), 'application/json'); };
   $('csv').onclick = function () {
@@ -270,10 +482,11 @@
     var r = new FileReader();
     r.onload = function () {
       try {
-        var s = JSON.parse(r.result);
-        if (!s || typeof s.steps !== 'object') throw 0;
-        state = { base: s.base > 0 ? s.base : 14510, steps: s.steps };
-        persist(); render(); say('Dados importados.');
+        var s = JSON.parse(r.result); if (!s || typeof s.steps !== 'object') throw 0;
+        var clean = {}, ok = {}; allDays().forEach(function (k) { ok[k] = 1; });
+        Object.keys(s.steps).forEach(function (k) { var v = Number(s.steps[k]); if (ok[k] && isFinite(v) && v >= 0) clean[k] = Math.round(v); });
+        state = { baseTotal: s.baseTotal > 0 ? Number(s.baseTotal) : 4504524, steps: clean };
+        persist(); pick(sel); say('Dados importados.');
       } catch (x) { say('Ficheiro inválido.'); }
     };
     r.readAsText(f); e.target.value = '';
