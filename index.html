@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Os meus passos até ao fim do ano</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --tx:#1b1f24; --mut:#6b7280; --ac:#2563eb; --ok:#16a34a; --bd:#e5e7eb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#111418; --card:#1a1f26; --tx:#e8eaed; --mut:#9aa3af; --ac:#60a5fa; --ok:#4ade80; --bd:#2a313a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.4 system-ui,-apple-system,Segoe UI,sans-serif; background:var(--bg); color:var(--tx); }
+  main { max-width:720px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:8px 0 16px; }
+  .card { background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:560px){ .grid { grid-template-columns:repeat(4,1fr); } }
+  .stat b { display:block; font-size:1.3rem; }
+  .stat span { color:var(--mut); font-size:.8rem; }
+  label { font-size:.85rem; color:var(--mut); display:block; margin-bottom:4px; }
+  input { font:inherit; color:inherit; background:var(--bg); border:1px solid var(--bd); border-radius:10px; padding:10px; width:100%; }
+  button { font:inherit; border:0; border-radius:10px; padding:10px 14px; background:var(--ac); color:#fff; cursor:pointer; }
+  button.sec { background:transparent; color:var(--ac); border:1px solid var(--bd); }
+  .row { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
+  .row > div { flex:1; min-width:120px; }
+  .bar { height:8px; background:var(--bd); border-radius:99px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--ac); }
+  .bar i.ok { background:var(--ok); }
+  .day { display:grid; grid-template-columns:78px 1fr 100px; gap:10px; align-items:center; padding:6px 0; border-top:1px solid var(--bd); }
+  .day:first-child { border-top:0; }
+  .day.today { font-weight:600; }
+  .day small { color:var(--mut); display:block; font-weight:400; }
+  .day input { padding:6px 8px; text-align:right; }
+  svg { width:100%; height:150px; display:block; }
+  .msg { font-size:.85rem; color:var(--mut); min-height:1.2em; margin-top:8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>👟 Passos até 31 de dezembro</h1>
+
+  <div class="card grid" id="stats"></div>
+
+  <div class="card">
+    <div class="row">
+      <div><label for="date">Dia</label><input type="date" id="date"></div>
+      <div><label for="steps">Passos</label><input type="number" id="steps" inputmode="numeric" min="0" placeholder="ex.: 8500"></div>
+      <button id="save">Guardar</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div><label for="goal">Meta diária</label><input type="number" id="goal" inputmode="numeric" min="1"></div>
+    </div>
+  </div>
+
+  <div class="card"><svg id="chart" viewBox="0 0 600 150" preserveAspectRatio="none"></svg></div>
+
+  <div class="card" id="days"></div>
+
+  <div class="card">
+    <div class="row">
+      <button class="sec" id="exp">Exportar JSON</button>
+      <button class="sec" id="csv">Exportar CSV</button>
+      <button class="sec" id="imp">Importar JSON</button>
+      <input type="file" id="file" accept="application/json" hidden>
+    </div>
+    <div class="msg" id="msg">Os dados ficam guardados neste browser. Exporta de vez em quando para teres cópia de segurança.</div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var KEY = 'passos-2026-v1';
+  var START = '2026-11-09', END = '2026-12-31';
+  var state = { goal: 10000, steps: {} };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) { var s = JSON.parse(raw); if (s && s.steps) state = { goal: s.goal || 10000, steps: s.steps }; }
+    } catch (e) {}
+  }
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { say('Não foi possível guardar neste browser. Usa "Exportar JSON".'); }
+  }
+  function say(t) { document.getElementById('msg').textContent = t; }
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function toKey(d) { return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()); }
+  function fromKey(k) { var p = k.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
+  function todayKey() { var n = new Date(); return n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate()); }
+  function allDays() {
+    var out = [], d = fromKey(START), e = fromKey(END);
+    while (d <= e) { out.push(toKey(d)); d = new Date(d.getTime() + 86400000); }
+    return out;
+  }
+  var WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  var MO = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  function label(k) { var d = fromKey(k); return d.getUTCDate() + ' ' + MO[d.getUTCMonth()]; }
+  function wd(k) { return WD[fromKey(k).getUTCDay()]; }
+  function fmt(n) { return Math.round(n).toLocaleString('pt-PT'); }
+
+  function render() {
+    var days = allDays(), today = todayKey();
+    var logged = days.filter(function (k) { return state.steps[k] != null; });
+    var total = logged.reduce(function (a, k) { return a + state.steps[k]; }, 0);
+    var avg = logged.length ? total / logged.length : 0;
+    var hit = logged.filter(function (k) { return state.steps[k] >= state.goal; }).length;
+    var best = logged.reduce(function (a, k) { return Math.max(a, state.steps[k]); }, 0);
+    var streak = 0, i = days.indexOf(today);
+    if (i < 0) i = today > END ? days.length - 1 : -1;
+    if (i >= 0) {
+      if (!(state.steps[days[i]] >= state.goal)) i--; // hoje ainda pode estar por cumprir
+      for (; i >= 0 && state.steps[days[i]] >= state.goal; i--) streak++;
+    }
+    var left = Math.max(0, days.filter(function (k) { return k > today; }).length);
+
+    var st = [
+      [fmt(total), 'passos no total'],
+      [fmt(avg), 'média por dia'],
+      [hit + '/' + days.length, 'dias com meta'],
+      [streak + (streak === 1 ? ' dia' : ' dias'), 'sequência atual'],
+      [fmt(best), 'melhor dia'],
+      [left, 'dias por viver'],
+      [state.goal ? Math.round(100 * hit / days.length) + '%' : '-', 'do período cumprido'],
+      [fmt(days.length * state.goal), 'meta total']
+    ];
+    document.getElementById('stats').innerHTML = st.map(function (s) {
+      return '<div class="stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>';
+    }).join('');
+
+    document.getElementById('goal').value = state.goal;
+
+    document.getElementById('days').innerHTML = days.map(function (k) {
+      var v = state.steps[k], pct = v ? Math.min(100, 100 * v / state.goal) : 0;
+      return '<div class="day' + (k === today ? ' today' : '') + '">' +
+        '<div>' + label(k) + '<small>' + wd(k) + '</small></div>' +
+        '<div class="bar"><i class="' + (v >= state.goal ? 'ok' : '') + '" style="width:' + pct + '%"></i></div>' +
+        '<input type="number" min="0" inputmode="numeric" data-k="' + k + '" value="' + (v != null ? v : '') + '" placeholder="-">' +
+        '</div>';
+    }).join('');
+
+    // gráfico
+    var W = 600, H = 150, n = days.length, bw = W / n;
+    var max = Math.max(state.goal, best, 1) * 1.1;
+    var bars = days.map(function (k, j) {
+      var v = state.steps[k] || 0, h = H * v / max;
+      return '<rect x="' + (j * bw + 1) + '" y="' + (H - h) + '" width="' + (bw - 2) + '" height="' + h +
+        '" rx="2" fill="' + (v >= state.goal ? 'var(--ok)' : 'var(--ac)') + '"><title>' + label(k) + ': ' + fmt(v) + '</title></rect>';
+    }).join('');
+    var gy = H - H * state.goal / max;
+    document.getElementById('chart').innerHTML = bars +
+      '<line x1="0" x2="' + W + '" y1="' + gy + '" y2="' + gy + '" stroke="var(--mut)" stroke-dasharray="4 4"/>';
+  }
+
+  function setDay(k, v) {
+    if (v === '' || v == null || isNaN(v) || +v < 0) delete state.steps[k];
+    else state.steps[k] = Math.round(+v);
+    persist(); render();
+  }
+
+  function download(name, text, type) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: type }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  document.getElementById('save').onclick = function () {
+    var k = document.getElementById('date').value, v = document.getElementById('steps').value;
+    if (!k || k < START || k > END) return say('Escolhe uma data entre 9 nov e 31 dez de 2026.');
+    if (v === '') return say('Indica o número de passos.');
+    setDay(k, v); document.getElementById('steps').value = ''; say('Guardado: ' + label(k) + ' — ' + fmt(v) + ' passos.');
+  };
+  document.getElementById('goal').onchange = function (e) {
+    var g = parseInt(e.target.value, 10); if (g > 0) { state.goal = g; persist(); render(); }
+  };
+  document.getElementById('days').onchange = function (e) {
+    if (e.target.dataset.k) setDay(e.target.dataset.k, e.target.value);
+  };
+  document.getElementById('date').onchange = function (e) {
+    var v = state.steps[e.target.value]; document.getElementById('steps').value = v != null ? v : '';
+  };
+  document.getElementById('exp').onclick = function () {
+    download('passos-2026.json', JSON.stringify(state, null, 2), 'application/json');
+  };
+  document.getElementById('csv').onclick = function () {
+    var rows = ['data,passos'].concat(Object.keys(state.steps).sort().map(function (k) { return k + ',' + state.steps[k]; }));
+    download('passos-2026.csv', rows.join('\n'), 'text/csv');
+  };
+  document.getElementById('imp').onclick = function () { document.getElementById('file').click(); };
+  document.getElementById('file').onchange = function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var s = JSON.parse(r.result);
+        if (!s || typeof s.steps !== 'object') throw 0;
+        state = { goal: s.goal > 0 ? s.goal : 10000, steps: s.steps };
+        persist(); render(); say('Dados importados.');
+      } catch (x) { say('Ficheiro inválido.'); }
+    };
+    r.readAsText(f); e.target.value = '';
+  };
+
+  load();
+  var t = todayKey();
+  document.getElementById('date').min = START;
+  document.getElementById('date').max = END;
+  document.getElementById('date').value = t < START ? START : t > END ? END : t;
+  render();
+})();
+</script>
+</body>
+</html>
