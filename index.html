@@ -77,7 +77,7 @@
       <button class="sec" id="clear">Apagar</button>
     </div>
     <div class="row" style="margin-top:12px">
-      <div><label for="goal">Meta diária</label><input type="number" id="goal" inputmode="numeric" min="1"></div>
+      <div><label for="base">Média de 2026 até ao fim de 8 nov (312 dias)</label><input type="number" id="base" inputmode="decimal" min="1" step="any"></div>
     </div>
     <div class="msg" id="msg"></div>
   </section>
@@ -118,15 +118,18 @@
 <script>
 (function () {
   var KEY = 'passos-2026-v1';
-  var START = '2026-11-08', END = '2026-12-31', NEAR = 0.8;
-  var state = { goal: 17972, steps: {} };
+  // Objetivo: 15 000 passos de média diária em 2026 (365 dias).
+  // Até ao fim de 8 nov (312 dias) a média era 14 510; o registo começa a 9 nov.
+  var START = '2026-11-09', END = '2026-12-31', NEAR = 0.8;
+  var YEAR_DAYS = 365, YEAR_AVG = 15000, BASE_DAYS = 312;
+  var state = { base: 14510, steps: {} };
   var sel = null;
 
   function $(id) { return document.getElementById(id); }
   function load() {
     try {
       var s = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (s && s.steps) state = { goal: (s.goal && s.goal !== 10000) ? s.goal : 17972, steps: s.steps };
+      if (s && s.steps) state = { base: s.base > 0 ? s.base : 14510, steps: s.steps };
     } catch (e) {}
   }
   function persist() {
@@ -150,33 +153,38 @@
   function short(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace('.', ',') + 'k' : String(n); }
 
   function render() {
-    var days = allDays(), today = todayKey(), N = days.length, g = state.goal;
+    var days = allDays(), today = todayKey(), N = days.length;
+    var baseTotal = state.base * BASE_DAYS, yearTotal = YEAR_AVG * YEAR_DAYS;
+    var toGo = Math.max(0, yearTotal - baseTotal);          // passos necessários desde 9 nov
+    var g = toGo / N;                                        // meta diária para fechar o ano
     var logged = days.filter(function (k) { return state.steps[k] != null; });
     var total = logged.reduce(function (a, k) { return a + state.steps[k]; }, 0);
-    var avg = logged.length ? total / logged.length : 0;
-    var goalTotal = g * N, missing = Math.max(0, goalTotal - total);
+    var avg = logged.length ? total / logged.length : 0;     // média desde 9 nov
+    var missing = Math.max(0, toGo - total);
     var remaining = days.filter(function (k) { return k >= today && state.steps[k] == null; }).length;
-    var projTotal = total + avg * remaining, projAvg = projTotal / N;
+    var pace = logged.length ? avg : state.base;             // ritmo usado na projeção
+    var projYear = (baseTotal + total + pace * remaining) / YEAR_DAYS;
+    var curYear = (baseTotal + total) / (BASE_DAYS + logged.length);
     var need = remaining ? missing / remaining : 0;
-    var pct = goalTotal ? Math.min(100, 100 * total / goalTotal) : 0;
+    var pct = toGo ? Math.min(100, 100 * total / toGo) : 100;
 
     $('arc').setAttribute('stroke-dasharray', pct + ' 100');
     $('pct').textContent = Math.round(pct) + '%';
     $('left').textContent = missing ? 'faltam ' + fmt(missing) : 'meta atingida!';
 
     var st = [
-      [fmt(avg), 'média atual / dia'],
-      [fmt(g), 'meta diária'],
-      [fmt(total), 'total acumulado'],
-      [fmt(projAvg), 'média projetada a 31 dez'],
-      [fmt(projTotal), 'total projetado'],
-      [remaining ? fmt(need) : '—', 'necessário / dia até ao fim']
+      [fmt(curYear), 'média atual de 2026'],
+      [fmt(g), 'meta diária (de 9 nov a 31 dez)'],
+      [fmt(total), 'total acumulado desde 9 nov'],
+      [fmt(projYear), 'média projetada a 31 dez'],
+      [logged.length ? fmt(avg) : '—', 'média diária desde 9 nov'],
+      [remaining ? fmt(need) : '—', 'necessário / dia daqui para a frente']
     ];
     $('stats').innerHTML = st.map(function (s) {
       return '<div class="stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>';
     }).join('');
 
-    $('goal').value = g;
+    $('base').value = state.base;
     $('glab').textContent = fmt(g);
 
     // calendário (semana a começar à segunda)
@@ -236,7 +244,7 @@
 
   $('save').onclick = function () {
     var k = $('date').value, v = $('steps').value;
-    if (!k || k < START || k > END) return say('Escolhe uma data entre 8 nov e 31 dez de 2026.');
+    if (!k || k < START || k > END) return say('Escolhe uma data entre 9 nov e 31 dez de 2026.');
     if (v === '') return say('Indica o número de passos.');
     sel = k; setDay(k, v); say('Guardado: ' + label(k) + ' — ' + fmt(v) + ' passos.');
   };
@@ -244,8 +252,8 @@
     var k = $('date').value; if (!k || state.steps[k] == null) return say('Esse dia não tem registo.');
     setDay(k, ''); $('steps').value = ''; say('Registo de ' + label(k) + ' apagado.');
   };
-  $('goal').onchange = function (e) {
-    var v = parseInt(e.target.value, 10); if (v > 0) { state.goal = v; persist(); render(); }
+  $('base').onchange = function (e) {
+    var v = parseFloat(e.target.value); if (v > 0) { state.base = v; persist(); render(); }
   };
   $('date').onchange = function (e) { if (e.target.value) pick(e.target.value); };
   $('cal').onclick = function (e) {
@@ -264,7 +272,7 @@
       try {
         var s = JSON.parse(r.result);
         if (!s || typeof s.steps !== 'object') throw 0;
-        state = { goal: s.goal > 0 ? s.goal : 17972, steps: s.steps };
+        state = { base: s.base > 0 ? s.base : 14510, steps: s.steps };
         persist(); render(); say('Dados importados.');
       } catch (x) { say('Ficheiro inválido.'); }
     };
