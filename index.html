@@ -145,6 +145,25 @@
 
   .cf { position:fixed; left:50%; top:42%; width:9px; height:14px; border-radius:2px; pointer-events:none; z-index:50; animation:cf 1.2s ease-out forwards; }
   @keyframes cf { to { transform:translate(var(--x),var(--y)) rotate(var(--r)); opacity:0; } }
+  /* ecrãs largos e telemóvel na horizontal */
+  @media (min-width:820px) {
+    main { max-width:1040px; }
+    .view.active { grid-template-columns:1fr 1fr; align-items:start; }
+    #v-hoje > .glass:first-child { grid-column:1; grid-row:1; }
+    #v-hoje > .stats { grid-column:1; grid-row:2; margin:0; padding:0 0 4px; }
+    #v-hoje > #registo { grid-column:2; grid-row:1 / span 2; }
+    #v-sem { grid-template-columns:1fr 1.3fr; }
+    #v-sem > .glass:first-child { position:sticky; top:72px; }
+  }
+  @media (max-height:520px) and (orientation:landscape) {
+    header.top { position:static; padding-top:calc(8px + env(safe-area-inset-top)); padding-bottom:6px; }
+    main { padding-bottom:calc(78px + env(safe-area-inset-bottom)); }
+    nav.tabs { width:min(360px,calc(100% - 28px)); padding:4px; bottom:calc(8px + env(safe-area-inset-bottom)); border-radius:20px; }
+    nav.tabs button { font-size:0; gap:0; padding:9px 0; border-radius:15px; }
+    nav.tabs button svg { width:22px; height:22px; }
+    .ringbox { max-width:150px; }
+    .glass { padding:16px; border-radius:22px; }
+  }
   @media (prefers-reduced-motion: reduce) { .cf{display:none} .blobs i{animation:none} .ringbox circle,.meter i{transition:none} .view.active{animation:none} }
 </style>
 </head>
