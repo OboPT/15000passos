@@ -191,6 +191,11 @@
 
 <main id="main">
 
+  <section class="glass" id="ban" role="alert" hidden style="margin-bottom:14px">
+    <p id="bantxt" style="margin:0 0 12px;font-weight:600"></p>
+    <div class="btns" id="banbtns"></div>
+  </section>
+
   <!-- HOJE -->
   <section class="view active" id="v-hoje" role="tabpanel" aria-labelledby="t-hoje">
     <h2 class="sr-only">Progresso e registo de hoje</h2>
@@ -583,10 +588,49 @@
     r.readAsText(f); e.target.value = '';
   };
 
+  function banner(msg, actions) {
+    $('bantxt').textContent = msg;
+    var box = $('banbtns'); box.innerHTML = '';
+    (actions || [['OK', null]]).forEach(function (a, i) {
+      var b = document.createElement('button'); b.className = 'btn' + (i ? ' ghost' : ''); b.textContent = a[0];
+      b.onclick = function () { $('ban').hidden = true; if (a[1]) a[1](); };
+      box.appendChild(b);
+    });
+    box.style.gridTemplateColumns = box.children.length > 1 ? '1fr 1fr' : '1fr';
+    $('ban').hidden = false; window.scrollTo(0, 0);
+  }
+  // Importação por link: #d=2026-11-13&s=18500  (d é opcional; sem d usa hoje)
+  function handleLink() {
+    var raw = (location.hash || '').replace(/^#/, '') || (location.search || '').replace(/^\?/, '');
+    if (!raw) return;
+    var q; try { q = new URLSearchParams(raw); } catch (e) { return; }
+    var d = q.get('d'), sv = q.get('s');
+    if (d === null && sv === null) return;
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    if (d === null || d === '') d = todayKey();
+    var okd = {}; allDays().forEach(function (k) { okd[k] = 1; });
+    var n = Number(sv);
+    if (!okd[d] || sv === null || sv === '' || !isFinite(n) || n < 0 || n > 200000) {
+      banner('Link inválido: precisa de um dia entre 8 nov e 31 dez e de um número de passos válido. Nada foi alterado.'); return;
+    }
+    n = Math.round(n);
+    var old = state.steps[d];
+    if (old == null) { setDay(d, n); pick(d); go('hoje'); banner('Guardado: ' + fmt(n) + ' passos em ' + label(d) + '.'); }
+    else if (n === old) { pick(d); go('hoje'); banner('Sem alterações: ' + label(d) + ' já tinha ' + fmt(n) + ' passos.'); }
+    else if (n > old) { setDay(d, n); pick(d); go('hoje'); banner('Atualizado: ' + label(d) + ' passou de ' + fmt(old) + ' para ' + fmt(n) + ' passos.'); }
+    else {
+      pick(d); go('hoje');
+      banner('O link traz ' + fmt(n) + ' passos para ' + label(d) + ', menos do que os ' + fmt(old) + ' já registados. Substituir?',
+        [['Substituir', function () { setDay(d, n); pick(d); }], ['Manter', null]]);
+    }
+  }
+
   load();
   $('date').min = START; $('date').max = END;
   var t = todayKey();
   pick(t < START ? START : t > END ? END : t);
+  handleLink();
+  window.addEventListener('hashchange', handleLink);
   try { if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(function () {}); } catch (e) {}
 })();
 </script>
